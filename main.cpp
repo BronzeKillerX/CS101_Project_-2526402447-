@@ -4,14 +4,14 @@
  * Student ID: 2526402447
  * Group: Computer Science A
  * Date: May 2026
- * Description: A menu-driven C++ application for recording student scores,
- * calculating grades/remarks, and generating class statistics.
+ * Description: This program is a Student Grade Management System that allows users to input student records, compute and assign grades, display class reports and statistics, and search for students by ID. 
+ * The program uses a struct to store student data and includes functions for input validation, grade computation, report generation, and searching. 
+ * The user interacts with the program through a menu-driven interface in the console.
  */
-#include <iostream>
-#include <string>
-#include <cctype>
-#include <iomanip>
-#include <fstream>
+#include <iostream> // Standard input/output stream library for console interactions.
+#include <string> // String library for handling student names and remarks.
+#include <cctype> // Character handling library for validating string inputs (isalpha, isdigit).
+#include <iomanip> // Input/output manipulation library for formatting the display of reports and statistics.
 
 /*
 	Struct of Student to contain all variables related to the student
@@ -35,11 +35,11 @@ struct student {
 */
 
 bool isStringOnly(std::string str) {
-	if (str.empty()) {
+	if (str.empty()) { // Check if the string is empty, if it is, return false as it does not meet the criteria of being a valid name.
 		return false;
 	}
 	for (int i = 0; i < str.length(); i++) {
-		if (!isalpha(str[i]) && !isspace(str[i])) {
+		if (!isalpha(str[i]) && !isspace(str[i])) { // Loop through each character in the string and check if it is not an alphabetic character and not a whitespace. If any character fails this check, return false as it does not meet the criteria of being a valid name.
 			return false;
 		}
 	}
@@ -55,11 +55,11 @@ bool isStringOnly(std::string str) {
 */
 
 bool isNumericOnly(std::string str) {
-	if (str.empty()) {
+	if (str.empty()) { // Check if the string is empty, if it is, return false as it does not meet the criteria of being a valid ID.
 		return false;
 	}
 	for (int i = 0; i < str.length(); i++) {
-		if (!isdigit(str[i])) return false;
+		if (!isdigit(str[i])) return false; // Loop through each character in the string and check if it is not a digit. If any character fails this check, return false as it does not meet the criteria of being a valid ID.
 	}
 	return true;
 }
@@ -74,10 +74,10 @@ bool isNumericOnly(std::string str) {
 */
 
 float getValidScore(std::string prompt, float min, float max) {
-	float score;
+	float score; 
 	std::cout << prompt;
 
-	while (!(std::cin >> score) || score < min || score > max) {
+	while (!(std::cin >> score) || score < min || score > max) { // Input validation loop that checks if the user input is a valid float and falls within the specified range (min and max). If the input is invalid, an error message is displayed, and the user is prompted to enter a valid score again.
 		std::cout << "Invalid! Enter a number between " << min << " and " << max << ": ";
 		std::cin.clear();
 		std::cin.ignore(1000, '\n');
@@ -100,13 +100,13 @@ int inputStudentData(student* studentData, int size) {
 		std::cout << "====================================================\n";
 		std::cout << "               STUDENT DATA ENTRY " << i + 1 << "   \n";
 		std::cout << "====================================================\n\n";
-		std::string choice;
+		std::string choice; // Variable to hold the user's choice for entering the next student record, initialized as an empty string.
 
 		//  Name Entry String Handling Block
 
 		std::cout << "\nEnter Student Name: ";
 			std::getline(std::cin >>std::ws, studentData[i].studentName); // Clear leading stream spaces
-			while (!isStringOnly(studentData[i].studentName)) {
+			while (!isStringOnly(studentData[i].studentName)) { //while loop with the condition that if input on the studentName returns false for the isStringOnly function, user should only enter a name with alphabetical characters.
 				std::cout << "\nInvalid Input!!!! Try Again: ";
 				std::getline(std::cin >> std::ws, studentData[i].studentName);
 			}
@@ -116,7 +116,7 @@ int inputStudentData(student* studentData, int size) {
 			std::cout << "\nEnter Student ID: ";
 			std::string tempID; // This is a temporal ID container for student data. (it enables 0 as starting digit input)
 			std::getline(std::cin >> std::ws, tempID); // Clear leading stream spaces
-			while (!isNumericOnly(tempID)) { //while loop with the condition that if input on the tempID returns false for the isNumericOnly function, user should only enter a digit.
+			while (!isNumericOnly(tempID)) { //while loop with the condition that if input on the tempID returns false for the isNumericOnly function, user should only enter a valid ID with numeric characters.
 				std::cout << "\nInvalid Input!!!! Try Again: ";
 				std::getline(std::cin >> std::ws, tempID);
 			}
@@ -141,7 +141,7 @@ int inputStudentData(student* studentData, int size) {
 
 		// Conditional loop to handle breaks in-between each student record entered.
 
-			std::cout << "Input next student data (y/n)";
+			std::cout << "Input next student data (y/n): ";
 			std::cin >> choice;
 			while (choice != "y" && choice != "n") {
 				std::cout << "Invalid Choice!!!. Try Again: ";
@@ -216,7 +216,7 @@ void computeGrades(student* studentData, int count) {
 }
 
 /**
-	* displayReport function used to display all recorded student data.
+	* displayReport function used to display all recorded student data. (sets as void type)
 	* student* studentData : a studentData pointer pass-by address parameter linking back to the active data array in the main function.
 	* int count : a parameter variable used to tell the function the number of student record available.
 */
@@ -242,22 +242,26 @@ void displayReports(student* studentData, int count) {
 }
 
 /**
-	* 
+	* displayStatistics function used to display class statistics such as highest score, lowest score, average score, pass count and fail count. (set as void type)
+	* student* studentData : a studentData pointer pass-by address parameter linking back to the active data array in the main function.
+	* int count : a parameter variable used to tell the function the number of student record available.
 */
 
 void displayStatistics(student* studentData, int count) {
-	int maxScoreIndex = 0;
-	int minScoreIndex = 0;
-	int passCount = 0;
-	int failCount = 0;
-	float sum = 0.0;
+	int maxScoreIndex = 0; // Variable to hold the index of the student with the highest score, initialized to 0 (first student).
+	int minScoreIndex = 0; // Variable to hold the index of the student with the lowest score, initialized to 0 (first student).
+	int passCount = 0; // Variable to count the number of students who passed, initialized to 0.
+	int failCount = 0; // Variable to count the number of students who failed, initialized to 0.
+	float sum = 0.0; // Variable to accumulate the total scores of all students, initialized to 0.0.
 
-	if (count == 0) {
+	if (count == 0) { // To check if no data record is entered.
 		std::cout << "No Data Available. Please Input Student Record\n";
 		return;
 	}
 
-	for (int i = 0; i < count; i++) {
+	// Loop through each student record to calculate statistics.
+
+	for (int i = 0; i < count; i++) { 
 		if (studentData[i].totalScore > studentData[maxScoreIndex].totalScore) {
 			maxScoreIndex = i;
 		}
@@ -273,9 +277,9 @@ void displayStatistics(student* studentData, int count) {
 			failCount++;
 		}
 
-		sum += studentData[i].totalScore;
+		sum += studentData[i].totalScore; // Accumulate the total score for average calculation.
 	}
-	float average = sum / count;
+	float average = sum / count; // Calculate the average score by dividing the total sum by the number of students (count).
 	std::system("cls");
 	std::cout << "=============================================\n";
 	std::cout << "              Class Statistics               \n";
@@ -287,17 +291,25 @@ void displayStatistics(student* studentData, int count) {
 	std::cout << "Students Passed: " << passCount << "  Failed: " << failCount <<std::endl;
 }
 
+/**
+	* searchByID function used to search for a student record by their ID and display their information if found. (set as void type)
+	* student* studentData : a studentData pointer pass-by address parameter linking back to the active data array in the main function.
+	* int count : a parameter variable used to tell the function the number of student record available.
+*/
+
 void searchByID(student* studentData, int count) {
-	if (count == 0) {
+	if (count == 0) { // To check if no data record is entered.
 		std::cout << "No Data Available. Please Input Student Record\n";
 		return;
 	}
 
-	int searchKey;
-	bool found = false;
+	int searchKey; // Variable to hold the student ID that the user wants to search for.
+	bool found = false; // Boolean variable to track whether a student with the specified ID was found, initialized to false.
 	std::system("cls");
 	std::cout << "Enter Student ID To Be Found: ";
 	std::cin >> searchKey;
+
+	// Loop through each student record to find a match for the searchKey (student ID).
 
 	for (int i = 0; i < count; i++) {
 		if (studentData[i].studentID == searchKey) {
@@ -316,25 +328,25 @@ void searchByID(student* studentData, int count) {
 		}
 	}
 
-	if (!found) {
+	if (!found) { // If the loop completes without finding a matching student ID, the found variable remains false, and this message is displayed to inform the user that the search was unsuccessful.
 		std::cout << "Student with ID: " << searchKey << " not found\n";
 	}
 
 }
 
 int main() {
-		student studentData[30];
-		int size = sizeof(studentData) / sizeof(studentData[0]);
-		int option = 0;
-		int studentCount = 0;
-		do {
+		student studentData[30]; // Array of student struct to hold up to 30 student records.
+		int size = sizeof(studentData) / sizeof(studentData[0]); // Calculate the number of elements in the array.
+		int option = 0; // Variable to hold the user's menu choice, initialized to 0.
+		int studentCount = 0; // Variable to keep track of the number of student records entered, initialized to 0.
+		do { // Start of a do-while loop that will continue to display the menu and process user input until the user chooses to exit (option 6).
 			std::system("cls");
 			std::cout << "===============================\n";
 			std::cout << "STUDENT GRADE MANAGEMENT SYSTEM\n";
 			std::cout << "===============================\n\n";
 
 			std::cout << "1. Enter Student Records \n2. Compute and Assign Grades \n3. Display Full Class Report \n4. Display Class Statistics \n5. Search Student by ID \n6. Exit \nEnter option: ";
-			if (!(std::cin >> option)) {
+			if (!(std::cin >> option)) { // Input validation for menu option to ensure that the user enters a valid integer. If the input is not an integer, the program will display an error message and prompt the user to enter a valid number.
 				std::cout << "Invalid input! Please enter a number.\n";
 				std::cin.clear();
 				std::cin.ignore(1000, '\n');
