@@ -1,4 +1,0 @@
-Student Name         | Student ID      | Quiz Score  Mid Semester Score | Exam Score   | Total Score   | Grade    | Remark    
----------------------------------------------------------------------------------------------------------------------------
-
-Batool Khadejah      | 1234567         | 12           | 12              | 12           | 36            | F        | Fail      
