@@ -161,7 +161,7 @@ int inputStudentData(student* studentData, int size) {
 	* return the right character based of the condition satisfied.
 */
 
-char assignGrades(float total) {
+char assignGrades(float total) { // Function to assign letter grades based on the total score. The function takes a float parameter 'total' which represents the total score of a student. It returns a char representing the letter grade assigned based on the following criteria:
 	if (total >= 80) {
 		return 'A';
 	}
